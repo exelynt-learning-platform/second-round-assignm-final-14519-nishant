@@ -1,5 +1,11 @@
 export const sendMessageToAPI = async (message, history = []) => {
   try {
+    // ✅ Transform history (remove id)
+    const formattedHistory = history.map(({ role, content }) => ({
+      role,
+      content,
+    }));
+
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -9,7 +15,7 @@ export const sendMessageToAPI = async (message, history = []) => {
       body: JSON.stringify({
         model: "gpt-4o-mini",
         messages: [
-          ...history,
+          ...formattedHistory, // ✅ fixed
           { role: "user", content: message },
         ],
       }),
